@@ -9,8 +9,7 @@ public class UserInteraction {
     public String currentPage;
     public static Scanner scanner;
     Database database;
-    // UIMessage uiMessage;
-    ArrayList<UIMessage> messageList;
+    UIMessage uiMessage;
     Boolean interactionFlag;
 
     public UserInteraction(Database database) {
@@ -18,10 +17,7 @@ public class UserInteraction {
         this.database = database;
         scanner = new Scanner(System.in);
         this.currentPage = "0";
-        this.messageList = new ArrayList<>();
-        this.messageList.add(new UIMessage("S1-0", "Welcome To Game World Online !"));
-        this.messageList.add(new UIMessage("S1-1",
-                "1.To view the game world online page please type NEXT and press Enter.\n2.If you're staff then type STAFF and press Enter"));
+        this.uiMessage = new UIMessage("0");
     }
 
     public String getCurrentPage() {
@@ -38,26 +34,33 @@ public class UserInteraction {
 
     public void startInteraction() {
         while (this.interactionFlag) {
-            System.out.println(this.messageList.get(0).getMessageString());
-            System.out.println(this.messageList.get(1).getMessageString());
+
+            System.out.println("\n****************************************************************************************************************");
+            System.out.println("Current Page "+this.currentPage);
+            System.out.println("****************************************************************************************************************");
+
+            this.uiMessage.getMessageByPageAndStep(this.currentPage, 0);
+            this.uiMessage.getMessageByPageAndStep(this.currentPage, 1);
+            if(this.currentPage == "0"){
+                this.uiMessage.getMessageByPageAndStep(this.currentPage, 2);
+            }
+
 
             String choice = scanner.next();
-            choice.toUpperCase();
+            choice = choice.toUpperCase();
 
-            switch (choice) {
+            if(choice.substring(0, 4).contains("GWO_")){
+                System.out.println("GWO_ pattern found" );
+            }else if(choice.equalsIgnoreCase("NEXT")){
+                if (this.currentPage == "0") {
+                    System.out.println("\n\nPage selected: next. Loading all the Games ...");
+                    this.currentPage = "1";
+                    this.uiMessage.setPageNumber("1");
+                    database.showAllGames();
+                }                
 
-                case "NEXT":
-                    if (this.currentPage == "0") {
-                        System.out.println("Page selected: next");
-                        this.currentPage = "1";
-
-                    }
-
-                default:
-                    // this.interactionFlag = false;
-                    System.out.println("\nThats a wrong input. Please try again...");
-                    break;
             }
+
 
         }
     }
