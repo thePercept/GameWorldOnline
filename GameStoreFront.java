@@ -12,82 +12,24 @@ package GameWorldOnline;
 //  11: Exception handling
 //  12: Multithread Programming
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
-import GameWorldOnline.ProductSection.Product;
-import GameWorldOnline.CartSection.ShoppingCart;
 import GameWorldOnline.DatabaseArea.Database;
+import GameWorldOnline.UserInteractionMenu.UserInteraction;
 
 public class GameStoreFront {
-    static List<Product> products;
-    static ShoppingCart cart;
-    static Scanner scanner;
     static Database database;
+    static UserInteraction userInteraction;
 
-
-    private static void start(){
+    private static void start() {
         database = new Database();
+        userInteraction = new UserInteraction(database);
+        userInteraction.startInteraction();
     }
-
-    private static void initializeProducts() {
-        System.out.println("Initializing GameStoreFront....");
-        scanner = new Scanner(System.in);
-        products = new ArrayList<>();
-        cart = new ShoppingCart();     
-
-        System.out.println("Initializing default list of products....");
-        products.add(new Product("Product 1", 49.99));
-        products.add(new Product("Product 2", 29.95));
-        products.add(new Product("Product 3", 79.99));
-    }
-
-    private static void displayProductList() {
-        System.out.println("Product List:");
-        for (int i = 0; i < products.size(); i++) {
-            System.out.println((i + 1) + ". " + products.get(i).getName() + " - $" + products.get(i).getPrice());
-        }
-    }
-
-    private static void displayCartItems() {
-        // List<Product> items = cart.getItems();
-        // for (Product item : items) {
-        //     System.out.println(item.getName() + " - $" + item.getPrice());
-        // }
-    }
-
 
     public static void main(String[] args) {
 
-        
-        System.out.println("Welcome to the E-Commerce System!");
         start();
-        initializeProducts();
+        System.out.println("Running..");
 
-
-        // while (true) {
-        //     displayProductList();
-
-        //     System.out.println("Enter the product number to add it to the cart (or 0 to exit): ");
-        //     int choice = scanner.nextInt();
-
-        //     if (choice == 0) {
-        //         break;
-        //     }
-
-        //     if (choice >= 1 && choice <= products.size()) {
-        //         Product selectedProduct = products.get(choice - 1);
-        //         cart.addItem(selectedProduct);
-        //         System.out.println(selectedProduct.getName() + " added to the cart.");
-        //     } else {
-        //         System.out.println("Invalid choice. Please try again.");
-        //     }
-        // }
-
-        // System.out.println("Thank you for shopping with us! Here is your order:");
-        // displayCartItems();
     }
-
 
 }
