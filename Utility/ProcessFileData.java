@@ -61,7 +61,7 @@ public class ProcessFileData implements ReadUserLoginData, ProcessGameData {
 
     private void insertIntoHashMap(String value){
         // structuredGameData
-        System.out.println("Splitting...")  ;      
+        // System.out.println("Splitting...")  ;      
         String[] valuesExtraction = value.split(",");  
         this.structuredGameData.put(removeSlash(valuesExtraction[0]),
         new Game(
@@ -83,6 +83,7 @@ public class ProcessFileData implements ReadUserLoginData, ProcessGameData {
             }
         }
 
+
     }
 
     @Override
@@ -92,10 +93,8 @@ public class ProcessFileData implements ReadUserLoginData, ProcessGameData {
 
     @Override
     public Game getgameByID(String gameID) {
-        System.out.println("Finally getgameByID "+gameID);
+        // System.out.println("Finally getgameByID "+gameID);
         if(this.structuredGameData.get(gameID)!=null){
-            System.out.println("getgameByID---> "+this.structuredGameData.get(gameID));
-
             return this.structuredGameData.get(gameID);
         }else{
             return null;

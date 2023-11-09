@@ -41,36 +41,35 @@ public class UserInteraction {
             System.out.println("****************************************************************************************************************");
 
             this.uiMessage.getMessageByPageAndStep(this.currentPage, 0);
-            this.uiMessage.getMessageByPageAndStep(this.currentPage, 1);
             if(this.currentPage == "0"){
+                this.uiMessage.getMessageByPageAndStep(this.currentPage, 1);            
                 this.uiMessage.getMessageByPageAndStep(this.currentPage, 2);
             }
 
 
             String choice = scanner.nextLine();
             choice = choice.toUpperCase();
-            System.out.print("GETING ???"+choice );
             String[] words = choice.split(" ");
             System.out.println("words ???"+words.length );
             
+            // When Adding to Cart (Page 2)
             if(words[0].matches("^ADD")){
-                System.out.println("GWO_ pattern found" );
+                this.clearScreen();
 
                 if(words.length>1){
                     if(database.searchGameById(words[1])==null){
-                        System.out.println("Game Selected NULLLLL");
+                        System.out.println("No games found in database, please try again");
                     }else{
                         gameSelected = database.searchGameById(words[1]);
-                        System.out.println("Game Selected is " + gameSelected.getName());
+                        System.out.println("Adding Game to Cart now :" + gameSelected.getName());
+                        this.currentPage = "2";
+                        this.uiMessage.setPageNumber("2");                        
                     }  
                 }
-
-
-
-
-
-        
-            }else if(choice.equalsIgnoreCase("NEXT")){
+            }
+            // When on 1st Screen (Page 1)
+            else if(choice.equalsIgnoreCase("NEXT")){
+                this.clearScreen();
                 if (this.currentPage == "0") {
                     System.out.println("\n\nPage selected: next. Loading all the Games ...");
                     this.currentPage = "1";
@@ -78,12 +77,26 @@ public class UserInteraction {
                     database.showAllGames();
                 }                
 
-            }else{
+            }
+            // When Cart is viewed (Page 3)
+            else if(choice.equalsIgnoreCase("PAY")){
+                this.clearScreen();
+
+            }
+            
+
+            // When wrong input
+            else{
                 System.out.println("FALSEEE");
             }
 
 
         }
+    }
+
+    private void clearScreen(){
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();          
     }
 
 }
