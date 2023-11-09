@@ -3,20 +3,27 @@ package GameWorldOnline.CartSection;
 import java.util.ArrayList;
 import java.util.List;
 
-import GameWorldOnline.ProductSection.Product;
+import GameWorldOnline.Utility.Game;
+
 
 public class ShoppingCart {
-    private List<Product> items;
+    private ArrayList<Game> gameCart;
 
     public ShoppingCart() {
-        this.items = new ArrayList<>();
+        this.gameCart = new ArrayList<Game>(); ;
     }
 
-    public void addItem(Product product) {
-        items.add(product);
+    public List<Game> getGameCart() {
+        return gameCart;
     }
 
-    public List<Product> getItems() {
-        return items;
+    public void addGamesinCart(Game game) {
+        this.gameCart.add(game);
     }
+
+    public void removeGamesFromCart() {
+        this.gameCart.clear();
+    }
+
+
 }

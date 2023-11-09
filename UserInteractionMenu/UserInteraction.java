@@ -2,6 +2,7 @@ package GameWorldOnline.UserInteractionMenu;
 
 import java.util.Scanner;
 
+import GameWorldOnline.CartSection.ShoppingCart;
 import GameWorldOnline.DatabaseArea.Database;
 import GameWorldOnline.FinanceSection.TaxCalculation;
 import GameWorldOnline.Utility.Game;
@@ -13,6 +14,7 @@ public class UserInteraction extends TaxCalculation {
     UIMessage uiMessage;
     Boolean interactionFlag;
     Game gameSelected;
+    ShoppingCart cart;
 
     public UserInteraction(Database database) {
         // Mimic Initial Page load -start
@@ -59,16 +61,29 @@ public class UserInteraction extends TaxCalculation {
             // 1
             if(this.currentPage == "2"){
                 System.out.println("\nAdding Game to Cart now :" + gameSelected.getName());
-                System.out.println("\tSr. \tGame ID \tGame Name \tPrice \tGST INCLUSIVE Amount"  );
-                String fomrattedSummary = String.format("\t1. \t%s \t%s \t%s \t%s ",
+                
+                // Init the cart and add the Game 
+                cart = new ShoppingCart();
+                cart.addGamesinCart(gameSelected);
+
+
+
+
+                System.out.println("\tSr. \tGame ID \tGame Name \t\tPrice \t\tGST INCLUSIVE Amount"  );
+                String fomrattedSummary = String.format("\t1. \t%s \t%s \t%s \t\t%s ",
                                                                 gameSelected.getId(),
                                                                 gameSelected.getName(),
-                                                                gameSelected.getPrice(), 
-                                                                this.getFinalRate(Integer.parseInt(gameSelected.getPrice()))
-                                                                
-                                                                
+                                                                Double.parseDouble(gameSelected.getPrice()), 
+                                                                this.getFinalRate(Double.parseDouble(gameSelected.getPrice()))
                                                                 );
-                System.out.println(fomrattedSummary  );
+                System.out.println(fomrattedSummary );
+                System.out.println("----------------------------------------------------------------------------------------------------------------");                
+                String fomrattedSummary2 = String.format("\tGROSS AMOUNT \t\t\t\t\t\t\t%s",this.getFinalRate(Double.parseDouble(gameSelected.getPrice())));
+                System.out.println(fomrattedSummary2);
+
+
+
+
 
 
             }
