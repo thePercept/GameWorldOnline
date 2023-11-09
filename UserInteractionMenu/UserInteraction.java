@@ -1,9 +1,9 @@
 package GameWorldOnline.UserInteractionMenu;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import GameWorldOnline.DatabaseArea.Database;
+import GameWorldOnline.Utility.Game;
 
 public class UserInteraction {
     public String currentPage;
@@ -11,6 +11,7 @@ public class UserInteraction {
     Database database;
     UIMessage uiMessage;
     Boolean interactionFlag;
+    Game gameSelected;
 
     public UserInteraction(Database database) {
         this.interactionFlag = true;
@@ -46,11 +47,29 @@ public class UserInteraction {
             }
 
 
-            String choice = scanner.next();
+            String choice = scanner.nextLine();
             choice = choice.toUpperCase();
-
-            if(choice.substring(0, 4).contains("GWO_")){
+            System.out.print("GETING ???"+choice );
+            String[] words = choice.split(" ");
+            System.out.println("words ???"+words.length );
+            
+            if(words[0].matches("^ADD")){
                 System.out.println("GWO_ pattern found" );
+
+                if(words.length>1){
+                    if(database.searchGameById(words[1])==null){
+                        System.out.println("Game Selected NULLLLL");
+                    }else{
+                        gameSelected = database.searchGameById(words[1]);
+                        System.out.println("Game Selected is " + gameSelected.getName());
+                    }  
+                }
+
+
+
+
+
+        
             }else if(choice.equalsIgnoreCase("NEXT")){
                 if (this.currentPage == "0") {
                     System.out.println("\n\nPage selected: next. Loading all the Games ...");
@@ -59,6 +78,8 @@ public class UserInteraction {
                     database.showAllGames();
                 }                
 
+            }else{
+                System.out.println("FALSEEE");
             }
 
 

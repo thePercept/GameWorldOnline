@@ -1,5 +1,6 @@
 package GameWorldOnline.DatabaseArea;
 
+import GameWorldOnline.Utility.Game;
 import GameWorldOnline.Utility.ProcessFileData;
 
 public class Database {
@@ -16,24 +17,17 @@ public class Database {
                 "C:\\Users\\abhis\\Desktop\\utkarsh\\GameWorldOnline\\DatabaseArea\\WebsiteInventory\\products.csv");
     }
 
+    public Game searchGameById(String gwid) {
+        
+        if(readFromFile.getgameByID(gwid) != null){
+            return readFromFile.getgameByID(gwid);
+        }else{
+            return null;
+        }
+    }
+
     public void showAllGames() {
         readFromFile.showAllGames();
-    }
-
-    public void showTopTenGamesByRating() {
-        readFromFile.showTopTenGamesByRating();
-    }
-
-    public void sortAllGamesByRatingHighToLow() {
-        readFromFile.sortAllGamesByRatingHighToLow();
-    }
-
-    public void groupGamesByPlatform() {
-        readFromFile.groupGamesByPlatform();
-    }
-
-    public void groupGamesByGenre() {
-        readFromFile.groupGamesByGenre();
     }
 
 }

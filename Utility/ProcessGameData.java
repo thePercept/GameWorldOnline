@@ -2,10 +2,10 @@ package GameWorldOnline.Utility;
 
 public interface ProcessGameData {
 
+    public void processGameData();
     public void showAllGames();
-    public void showTopTenGamesByRating();
-    public void sortAllGamesByRatingHighToLow();
-    public void groupGamesByPlatform();
-    public void groupGamesByGenre();
+    public Game getgameByID(String gameID);
+
+
     
 }

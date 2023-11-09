@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProcessFileData implements ReadUserLoginData, ProcessGameData {
@@ -16,11 +17,13 @@ public class ProcessFileData implements ReadUserLoginData, ProcessGameData {
     public String line;
     String[] tempArr;
     List<String[]> results;
+    HashMap<String,Game> structuredGameData;
 
     public ProcessFileData(String readFileType, String filePath) {
         this.readFileType = readFileType;
         this.line = "";
         results = new ArrayList<String[]>();
+        structuredGameData = new HashMap<>();
 
         try {
             fileInputStream = new FileInputStream(filePath);
@@ -45,15 +48,39 @@ public class ProcessFileData implements ReadUserLoginData, ProcessGameData {
             }
         }
 
+
+        this.processGameData();
+
+    }
+    private String removeSlash(String str){
+        if (str.startsWith("\"") && str.endsWith("\"")) {
+            str = str.substring(1, str.length() - 1);
+        }
+        return str;        
+    }
+
+    private void insertIntoHashMap(String value){
+        // structuredGameData
+        System.out.println("Splitting...")  ;      
+        String[] valuesExtraction = value.split(",");  
+        this.structuredGameData.put(removeSlash(valuesExtraction[0]),
+        new Game(
+            removeSlash(valuesExtraction[0]),
+            removeSlash(valuesExtraction[1]),
+            removeSlash(valuesExtraction[2]),
+            removeSlash(valuesExtraction[3]),  
+            removeSlash(valuesExtraction[4]),
+            removeSlash(valuesExtraction[5])
+            )
+        );
     }
 
     public void processGameData() {
 
         for (String[] row : results) {
             for (String value : row) {
-                System.out.print(value + "");
+                this.insertIntoHashMap(value);
             }
-            System.out.println();
         }
 
     }
@@ -64,33 +91,26 @@ public class ProcessFileData implements ReadUserLoginData, ProcessGameData {
     }
 
     @Override
+    public Game getgameByID(String gameID) {
+        System.out.println("Finally getgameByID "+gameID);
+        if(this.structuredGameData.get(gameID)!=null){
+            System.out.println("getgameByID---> "+this.structuredGameData.get(gameID));
+
+            return this.structuredGameData.get(gameID);
+        }else{
+            return null;
+        }
+        
+    }
+    @Override
     public void showAllGames() {
         for (String[] row : results) {
             for (String value : row) {
                 System.out.print(value + "");
             }
             System.out.println();
-        }
+        }        
     }
 
-    @Override
-    public void showTopTenGamesByRating() {
-
-    }
-
-    @Override
-    public void sortAllGamesByRatingHighToLow() {
-
-    }
-
-    @Override
-    public void groupGamesByPlatform() {
-
-    }
-
-    @Override
-    public void groupGamesByGenre() {
-
-    }
 
 }
