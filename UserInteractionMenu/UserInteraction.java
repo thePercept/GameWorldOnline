@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import GameWorldOnline.CartSection.ShoppingCart;
 import GameWorldOnline.DatabaseArea.Database;
+import GameWorldOnline.DatabaseArea.UserDetailsStorageArea.InvoiceGeneration;
 import GameWorldOnline.FinanceSection.TaxCalculation;
 import GameWorldOnline.Utility.Game;
 
@@ -15,12 +16,12 @@ public class UserInteraction extends TaxCalculation {
     Boolean interactionFlag;
     Game gameSelected;
     ShoppingCart cart;
+    InvoiceGeneration invoiceGeneration;
 
     public UserInteraction(Database database) {
         // Mimic Initial Page load -start
         Thread thread_one = new Thread(new UILoading());
         thread_one.start();
-                  
 
         this.interactionFlag = true;
         this.database = database;
@@ -28,11 +29,7 @@ public class UserInteraction extends TaxCalculation {
         this.currentPage = "0";
         this.uiMessage = new UIMessage("0");
 
-
         // Mimic Initial Page load -end
-
-  
-
 
     }
 
@@ -51,115 +48,102 @@ public class UserInteraction extends TaxCalculation {
     public void startInteraction() {
         while (this.interactionFlag) {
 
-
-
-            System.out.println("\n****************************************************************************************************************");
-            System.out.println("Current Page "+this.currentPage);
-            System.out.println("****************************************************************************************************************");
-
+            System.out.println(
+                    "\n****************************************************************************************************************");
+            System.out.println("Current Page " + this.currentPage);
+            System.out.println(
+                    "****************************************************************************************************************");
 
             // 1
-            if(this.currentPage == "2"){
+            if (this.currentPage == "2") {
                 System.out.println("\nAdding Game to Cart now :" + gameSelected.getName());
-                
-                // Init the cart and add the Game 
+
+                // Init the cart and add the Game
                 cart = new ShoppingCart();
                 cart.addGamesinCart(gameSelected);
 
-
-
-
-                System.out.println("\tSr. \tGame ID \tGame Name \t\tPrice \t\tGST INCLUSIVE Amount"  );
+                System.out.println("\tSr. \tGame ID \tGame Name \t\tPrice \t\tGST INCLUSIVE Amount");
                 String fomrattedSummary = String.format("\t1. \t%s \t%s \t%s \t\t%s ",
-                                                                gameSelected.getId(),
-                                                                gameSelected.getName(),
-                                                                Double.parseDouble(gameSelected.getPrice()), 
-                                                                this.getFinalRate(Double.parseDouble(gameSelected.getPrice()))
-                                                                );
-                System.out.println(fomrattedSummary );
-                System.out.println("----------------------------------------------------------------------------------------------------------------");                
-                String fomrattedSummary2 = String.format("\tGROSS AMOUNT \t\t\t\t\t\t\t%s",this.getFinalRate(Double.parseDouble(gameSelected.getPrice())));
+                        gameSelected.getId(),
+                        gameSelected.getName(),
+                        Double.parseDouble(gameSelected.getPrice()),
+                        this.getFinalRate(Double.parseDouble(gameSelected.getPrice()))
+                        
+                        );
+                System.out.println(fomrattedSummary);
+                System.out.println(
+                        "----------------------------------------------------------------------------------------------------------------");
+                String fomrattedSummary2 = String.format("\tGROSS AMOUNT \t\t\t\t\t\t\t%s",
+                        this.getFinalRate(Double.parseDouble(gameSelected.getPrice())));
                 System.out.println(fomrattedSummary2);
 
-
-
-
-
+                invoiceGeneration = new InvoiceGeneration(gameSelected,this.getFinalRate(Double.parseDouble(gameSelected.getPrice())));
 
             }
 
             // 2
             this.uiMessage.getMessageByPageAndStep(this.currentPage, 0);
-     
-            
-            //3 
-            if(this.currentPage == "0"){
+
+            // 3
+            if (this.currentPage == "0") {
                 // Mimic Page load
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }                 
-                this.uiMessage.getMessageByPageAndStep(this.currentPage, 1);            
+                }
+                this.uiMessage.getMessageByPageAndStep(this.currentPage, 1);
                 this.uiMessage.getMessageByPageAndStep(this.currentPage, 2);
             }
-            
-
-
-
-
-
 
             String choice = scanner.nextLine();
             choice = choice.toUpperCase();
             String[] words = choice.split(" ");
-            System.out.println("words ???"+words.length );
-            
+            System.out.println("words ???" + words.length);
+
             // When Adding to Cart (Page 2)
-            if(words[0].matches("^ADD")){
+            if (words[0].matches("^ADD")) {
                 this.clearScreen();
 
-                if(words.length>1){
-                    if(database.searchGameById(words[1])==null){
+                if (words.length > 1) {
+                    if (database.searchGameById(words[1]) == null) {
                         System.out.println("No games found in database, please try again");
-                    }else{
+                    } else {
                         gameSelected = database.searchGameById(words[1]);
                         // System.out.println("Adding Game to Cart now :" + gameSelected.getName());
                         this.currentPage = "2";
-                        this.uiMessage.setPageNumber("2");                        
-                    }  
+                        this.uiMessage.setPageNumber("2");
+                    }
                 }
             }
             // When on 1st Screen (Page 1)
-            else if(choice.equalsIgnoreCase("NEXT")){
+            else if (choice.equalsIgnoreCase("NEXT")) {
                 this.clearScreen();
                 if (this.currentPage == "0") {
                     System.out.println("\n\nPage selected: next. Loading all the Games ...");
                     this.currentPage = "1";
                     this.uiMessage.setPageNumber("1");
                     database.showAllGames();
-                }                
+                }
 
             }
             // When Cart is viewed (Page 3)
-            else if(choice.equalsIgnoreCase("PAY")){
+            else if (choice.equalsIgnoreCase("PAY")) {
                 this.clearScreen();
 
             }
-            
 
             // When wrong input
-            else{
-                System.out.println("FALSEEE");
+            else {
+                System.out.println("Wrong Input");
             }
-
 
         }
     }
 
-    private void clearScreen(){
-        System.out.print("\033[H\033[2J");  
-        System.out.flush();          
+    private void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     @Override
