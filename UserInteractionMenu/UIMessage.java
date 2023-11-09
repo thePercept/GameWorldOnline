@@ -17,9 +17,9 @@ public class UIMessage {
 
 
 
-        pageOneMessages.put(0, "Welcome To Game World Online !");
-        pageOneMessages.put(1, "To view the game world online page please type NEXT and press Enter.");
-        pageOneMessages.put(2, "2.If you're staff then type STAFF and press Enter.");
+        pageOneMessages.put(0, "### Welcome To Game World Online ! ###");
+        pageOneMessages.put(1, "1. To view the game world online page please type NEXT and press Enter.");
+        pageOneMessages.put(2, "2. If you're staff then type STAFF and press Enter.");
 
 
         pageTwoMessages.put(0, "Add a game in the Cart by typing ADD followed by the GWO ID and press enter. For example. ADD GWO_1211");
